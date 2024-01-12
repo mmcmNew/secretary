@@ -1,8 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.041,=F:\Projects\0 Иконки\Секретарь.png</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.676,F:\Projects\0 Иконки\settings.png=</Transaction>
     <Transaction>1899.12.30 00:00:00.000.039,=F:\Projects\0 Иконки\settings.png</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.676,F:\Projects\0 Иконки\settings.png=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.041,=F:\Projects\0 Иконки\Секретарь.png</Transaction>
+    <Transaction>2024.01.12 21:45:55.171,=F:\Projects\Delphi\Секретарь\Секретарь_v2\Unit1.pas</Transaction>
+    <Transaction>2024.01.12 21:46:54.700,F:\Projects\Delphi\Секретарь\Секретарь_v2\TreadModule.pas=F:\Projects\Delphi\Секретарь\Секретарь_v2\Unit1.pas</Transaction>
+    <Transaction>2024.01.12 21:46:54.700,F:\Projects\Delphi\Секретарь\Секретарь_v2\TreadModule.dfm=F:\Projects\Delphi\Секретарь\Секретарь_v2\Unit1.dfm</Transaction>
+    <Transaction>2024.01.12 21:49:01.957,F:\Projects\Delphi\Секретарь\Секретарь_v2\TreadModuleLoad.pas=F:\Projects\Delphi\Секретарь\Секретарь_v2\TreadModule.pas</Transaction>
+    <Transaction>2024.01.12 21:49:01.957,F:\Projects\Delphi\Секретарь\Секретарь_v2\TreadModuleLoad.dfm=F:\Projects\Delphi\Секретарь\Секретарь_v2\TreadModule.dfm</Transaction>
+    <Transaction>2024.01.12 22:37:42.511,F:\Projects\Delphi\Секретарь\Секретарь_v2\TreadModuleLoad.pas=</Transaction>
   </Transactions>
 </BorlandProject>

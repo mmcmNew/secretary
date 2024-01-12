@@ -130,6 +130,7 @@ var
   RectColored: Int8 = 30;
   TimerCreateBool: Boolean;
   TimerRefresh: Boolean = True;
+  ExcelApp: OleVariant;
 
 
 implementation
@@ -438,8 +439,6 @@ var
 begin
   try
     // Создание экземпляра Excel
-    ExcelApp := CreateOleObject('Excel.Application');
-    ExcelApp.Visible := False;
     Workbook := ExcelApp.Workbooks.Open(ExePath + HistoryBaseName);
     Sheet := Workbook.Worksheets[1]; // Лист 1
 
@@ -469,8 +468,7 @@ begin
     //Memo1.Lines.Add('Данные записаны');
     // Сохранение и закрытие книги
     Workbook.Save;
-    ExcelApp.Quit;
-    ExcelApp := Unassigned;
+
   except
     on E: Exception do
 
@@ -481,10 +479,14 @@ procedure THeaderFooterForm.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
   SpdBSavePath.OnClick(SpdBSavePath);
+  ExcelApp.Quit;
+  ExcelApp := Unassigned;
 end;
 
 procedure THeaderFooterForm.FormCreate(Sender: TObject);
 begin
+  ExcelApp := CreateOleObject('Excel.Application');
+  ExcelApp.Visible := False;
   MusicCheck := 'NoSound';
   SoundFilePath := ExePath + 'res\Sound\check.wav';
   DeltaTime := StrToTime('00:00');
@@ -515,7 +517,6 @@ end;
 procedure THeaderFooterForm.LoadExcelDataToGrid(const FileName: string;
   SGMain: TStringGrid);
 var
-  ExcelApp: OleVariant;
   Workbook: OleVariant;
   Sheet: OleVariant;
   I, j, DayOfWeek: Integer;
@@ -528,9 +529,7 @@ begin
   // Текущий день недели (1 - Понедельник, ..., 7 - Воскресенье)
 
   // Создание экземпляра Excel
-  ExcelApp := CreateOleObject('Excel.Application');
   try
-    ExcelApp.Visible := False;
     Workbook := ExcelApp.Workbooks.Open(FileName);
     Sheet := Workbook.Worksheets[1];
 
@@ -614,10 +613,10 @@ begin
 
     // Закрытие и освобождение ресурсов
     Workbook.Close(False);
-    ExcelApp.Quit;
 
-  finally
-    ExcelApp := Unassigned;
+
+  except
+    HeaderLabel.text := 'Не удалось загрузить расписание';
   end;
 
 end;
