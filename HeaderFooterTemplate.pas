@@ -168,7 +168,7 @@ begin
   SetLength(SuitableColumns, 0);
   NonEmptyRowCount := 0;
   if TargetRow = -1 then Exit;
-  Memo1.Lines.Add('Tаймер запущен. TargetRow: ' + IntToStr(TargetRow));
+  //Memo1.Lines.Add('Tаймер запущен. TargetRow: ' + IntToStr(TargetRow));
 
   // 1. Проверка наличия всех заголовков таблицы SGVideo в SGPlan.Cells[0,2]
   for I := 0 to SGVideo.ColumnCount - 1 do
@@ -186,7 +186,7 @@ begin
       end;
     end;
   end;
-  Memo1.Lines.Add('Columns: ' + IntToStr(Length(SuitableColumns)));
+  //Memo1.Lines.Add('Columns: ' + IntToStr(Length(SuitableColumns)));
 
   //Если видео нет, то воспроизводим звук и выходим
   if Length(SuitableColumns) = 0 then
@@ -200,7 +200,7 @@ begin
   // 2. Случайный выбор одного из подходящих столбцов
   ColumnIndex := SuitableColumns[Random(Length(SuitableColumns))];
 
-  Memo1.Lines.Add('RandomColumnIndex: ' + IntToStr(ColumnIndex));
+  //Memo1.Lines.Add('RandomColumnIndex: ' + IntToStr(ColumnIndex));
 
   // 5. Выбор случайной не пустой строки в столбце
 
@@ -208,7 +208,7 @@ begin
     J := Random(NonEmptyRowCount-1);
   until SGVideo.Cells[ColumnIndex, J] <> '';
 
-  Memo1.Lines.Add('RandomRowIndex: ' + IntToStr(J));
+  //Memo1.Lines.Add('RandomRowIndex: ' + IntToStr(J));
   // When the current media ends the player starts playing
   // the next media in playlist
 
@@ -249,7 +249,7 @@ begin
 
   if Time <= DeltaTime then
   begin
-    Memo1.Lines.Add('DeltaTime: ' + TimeToStr(DeltaTime) + ' - Time: ' + TimeToStr(Time) + ' - 23:00 + 01:00');
+    //Memo1.Lines.Add('DeltaTime: ' + TimeToStr(DeltaTime) + ' - Time: ' + TimeToStr(Time) + ' - 23:00 + 01:00');
     CurrentTime := (DeltaTime - Time);
     CurrentTime := StrToTime('23:00') - CurrentTime + StrToTime('01:00'); //если текущее время меньше дельты то высчитываем время назад от получночи
   end
@@ -259,7 +259,7 @@ begin
 
   TargetRow := -1;
   // Инициализация переменной для строки, в которой найдено совпадение
-  TargetTime := StrToTime('00:00');
+  //TargetTime := StrToTime(SGMain.Cells[2, I]) - DeltaTime;;
 
   // Шаг 1: Вычисление строки, соответствующей текущему времени
   for I := 0 to SGMain.RowCount - 1 do
@@ -274,7 +274,7 @@ begin
 
     if CurrentTime < TargetTime then
     begin
-      Memo1.Lines.Add('TargetTime - Delta: ' + TimeToStr(TargetTime));
+      //Memo1.Lines.Add('TargetTime - Delta: ' + TimeToStr(TargetTime));
       TargetRow := I - 1;
       Break;
     end
@@ -282,10 +282,10 @@ begin
       TargetRow := lastRowMain;
   end;
 
-  Memo1.Lines.Add('Перед условиями');
+ { Memo1.Lines.Add('Перед условиями');
   Memo1.Lines.Add('CurrentTime: ' + TimeToStr(CurrentTime));
   Memo1.Lines.Add('TargetTime: ' + TimeToStr(TargetTime));
-  Memo1.Lines.Add('TargetRow: ' + IntToStr(TargetRow));
+  Memo1.Lines.Add('TargetRow: ' + IntToStr(TargetRow));   }
 
 
   if TargetRow = -1 then begin
@@ -310,8 +310,8 @@ begin
   end;
 
   // Записываем следующее время для сравнения в таймере
-  Memo1.Lines.Add('NowTime: ' + SGMain.Cells[2, TargetRow]);
-  Memo1.Lines.Add('NextTime: ' + NextTime);
+  //Memo1.Lines.Add('NowTime: ' + SGMain.Cells[2, TargetRow]);
+  //Memo1.Lines.Add('NextTime: ' + NextTime);
 
   LabelNextTime.Text := 'NextTime: ' + NextTime;
   LabelNowTime.Text := 'NowTime: ' + SGMain.Cells[2, TargetRow];
@@ -328,11 +328,16 @@ begin
 
   if (Pos('Здравствуйте', HeaderLabel.Text) <> 0) and (SwitchLoadMissed.IsChecked = True) then
   begin
-    for i := 0 to TargetRow do
+    SetLength(TargetWorks, TargetRow + 1);
+    for i := 0 to TargetRow do begin
       TargetWorks[i] := SGMain.Cells[1, i];
+      //Memo1.Lines.Add('SGMain.Cells[1, i]: ' + SGMain.Cells[1, i]);
+    end;
   end
   else
   begin
+    SetLength(TargetWorks, 1);
+    //Memo1.Lines.Add('SGMain.Cells[1, TargetRow]: ' + SGMain.Cells[1, TargetRow]);
     TargetWorks[0] := SGMain.Cells[1, TargetRow];
   end;
 
@@ -352,9 +357,7 @@ begin
       //Если работа уже есть в списке, то пропускаем
       if (Pos(HeaderText, WorksNames) <> 0) then Break;
 
-      //Memo1.Lines.Add('Found: ' + IntToStr(Found));
       WorksNames := WorksNames + ',/,' + HeaderText;
-      //Memo1.Lines.Add(InttoStr(Found));
       // Копирование непустых строк из SGEd в SGPlan
       for I := 0 to SGEd.RowCount - 1 do
       begin
@@ -388,6 +391,8 @@ begin
     end;
   end;
 
+  SetLength(TargetWorks, 0);
+
   //Добавление задачи на лету
 
   for i := SGPlan.RowCount - 1 downto 0  do
@@ -397,7 +402,7 @@ begin
   SGPlan.RowCount := SGPlan.RowCount + 1;
   SGPlan.Cells[0, SGPlan.RowCount - 1] := '       ...Нажимите чтоб добавить задачу...';
 
-  Memo1.Lines.Add(WorksNames);
+  //Memo1.Lines.Add(WorksNames);
 
   ImageControl1.Visible := False;
 
@@ -406,25 +411,25 @@ begin
   //Преобразование времени для таймера
   NextTimeTimer := StrToTime(NextTime);
 
-  Memo1.Lines.Add('NextTimeTimer: ' + TimeToStr(NextTimeTimer));
-  Memo1.Lines.Add('DeltaTime: ' + TimeToStr(DeltaTime));
+  //Memo1.Lines.Add('NextTimeTimer: ' + TimeToStr(NextTimeTimer));
+  //Memo1.Lines.Add('DeltaTime: ' + TimeToStr(DeltaTime));
 
   if NextTimeTimer <= DeltaTime + lastTaskTime + StrToTime('00:01') then
   begin
-    Memo1.Lines.Add('Таймер. NextTimeTimer <= DeltaTime ');
-    Memo1.Lines.Add('DeltaTime: ' + TimeToStr(DeltaTime) + ' - Time: ' + TimeToStr(NextTimeTimer) + ' - 23:00 + 01:00');
+    //Memo1.Lines.Add('Таймер. NextTimeTimer <= DeltaTime ');
+    //Memo1.Lines.Add('DeltaTime: ' + TimeToStr(DeltaTime) + ' - Time: ' + TimeToStr(NextTimeTimer) + ' - 23:00 + 01:00');
     NextTimeTimer := (DeltaTime - NextTimeTimer);
     NextTimeTimer := StrToTime('23:00') - NextTimeTimer + StrToTime('01:00'); //если текущее время меньше дельты то высчитываем время назад от получночи
   end
   else
     NextTimeTimer := NextTimeTimer - DeltaTime;
 
-  Memo1.Lines.Add('NextTimeTimer: ' + TimeToStr(NextTimeTimer));
+  //Memo1.Lines.Add('NextTimeTimer: ' + TimeToStr(NextTimeTimer));
 
   if FlagVideo = False then TimerCreateBool := False
   else TimerCreateBool := True;
 
-  Memo1.Lines.Add('Timer1.Enabled := True;');
+  //Memo1.Lines.Add('Timer1.Enabled := True;');
 
   Timer1.Enabled := True;
   Timer1Timer(Timer1);
@@ -432,11 +437,13 @@ end;
 
 procedure THeaderFooterForm.ExportToExcel;
 var
-  ExcelApp: OleVariant;
   Workbook: OleVariant;
   Sheet: OleVariant;
   I, LastRow: Integer;
 begin
+
+  //Memo1.Lines.Add('ExportToExcel');
+
   try
     // Создание экземпляра Excel
     Workbook := ExcelApp.Workbooks.Open(ExePath + HistoryBaseName);
@@ -468,9 +475,11 @@ begin
     //Memo1.Lines.Add('Данные записаны');
     // Сохранение и закрытие книги
     Workbook.Save;
+    Workbook.Close(False);
 
   except
-    on E: Exception do
+    HeaderLabel.Text := 'История не загружена';
+    //on E: Exception do
 
   end;
 end;
@@ -486,7 +495,7 @@ end;
 procedure THeaderFooterForm.FormCreate(Sender: TObject);
 begin
   ExcelApp := CreateOleObject('Excel.Application');
-  ExcelApp.Visible := False;
+  ExcelApp.Visible := false;
   MusicCheck := 'NoSound';
   SoundFilePath := ExePath + 'res\Sound\check.wav';
   DeltaTime := StrToTime('00:00');
@@ -535,6 +544,12 @@ begin
 
     // Определение общего количества строк на листе
     TotalRows := Sheet.UsedRange.Rows.Count;
+
+    //Если время меньше времени в последней ячейке таблицы, то загружаем предыдущий день
+    //Время никак не хотело сравниваться и пришлось туда сюда его преобразовать
+    if StrToTime(FormatDateTime('hh:nn', Sheet.Cells[TotalRows, 2].Value)) > StrToTime(FormatDateTime('hh:nn', Now)) then Dec(DayOfWeek);
+    if DayOfWeek = 0 then DayOfWeek := 7;
+
 
     // Установка количества строк в StringGrid
     SGMain.RowCount := TotalRows - 4;
@@ -743,25 +758,29 @@ begin
   LastTime := StrToTime(SGMain.Cells[2, SGMain.RowCount - 1]);
   if LastTime < FirstTime then
     DeltaTime := LastTime + StrToTime('01:00');
-  Memo1.Lines.Add('DeltaTime: ' + TimeToStr(DeltaTime));
+  //Memo1.Lines.Add('DeltaTime: ' + TimeToStr(DeltaTime));
   CheckPlan;
 end;
 
 procedure THeaderFooterForm.SpdBSaveClick(Sender: TObject);
 var
-  i, checkedCount:integer;
+  i, needSave:integer;
 
 begin
   if SGPlan.RowCount < 2 then Exit;
 
-  checkedCount := 0;
+  needSave := 0;
 
   //Проверяем есть ли выполненные пункты плана
   for I := 0 to SGPlan.RowCount -2 do
-    if SGPlan.Cells[1, i] = 'True' then inc(checkedCount);
+    if SGPlan.Cells[1, i] = 'True' then begin
+      needSave := 1;
+      Break;
+    end;
 
-  if checkedCount > 0 then ExportToExcel;
+  if needSave = 1 then ExportToExcel;
 
+  //Memo1.Lines.Add('needSave: ' + IntToStr(needSave));
 
   FlagVideo := False;
   SGPlan.RowCount := 0;
@@ -913,7 +932,7 @@ begin
   else
   begin
     Memo1.Text := '';
-    Memo1.Lines.Add('Настало время идти дальше NextTime: ' + NextTime);
+    //Memo1.Lines.Add('Настало время идти дальше NextTime: ' + NextTime);
     FlagVideo := True;
     CheckPlan;
     RectColored := 30;
