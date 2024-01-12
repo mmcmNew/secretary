@@ -1,0 +1,21 @@
+program HeaderFooterApplication;
+
+
+
+
+
+uses
+  System.StartUpCopy,
+  FMX.Forms,
+  HeaderFooterTemplate in 'HeaderFooterTemplate.pas' {HeaderFooterForm},
+  TreadModuleLoad in 'TreadModuleLoad.pas' {ThreadModule: TDataModule};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.CreateForm(THeaderFooterForm, HeaderFooterForm);
+  Application.CreateForm(TThreadModule, ThreadModule);
+  Application.Run;
+
+end.
